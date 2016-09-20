@@ -133,7 +133,7 @@ class GravityFormsAutomaticCSVExport {
 	public function gforms_automated_export() {
 
 		$output = "";
-		$form_id = substr( current_filter() , -1);
+		$form_id = explode('_', current_filter())[2];
 		$form = GFAPI::get_form( $form_id ); // get form by ID 
 		$search_criteria = array();
 
