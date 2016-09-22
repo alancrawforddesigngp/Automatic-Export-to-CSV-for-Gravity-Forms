@@ -182,15 +182,30 @@ class GravityFormsAutomaticCSVExport {
 		if(in_array($field->type, array('section','html','page'))
 			continue;
 
-            //don't include hidden name fields
-            if( $field->type == 'name' ) {
-            	if ( !empty( $field->choices) ){
-	                foreach( $field->choices as $choice ) {
-	                    if( $choice->isHidden == 1 )
-	                        continue;
-	                }
-            	}
-            }
+            // handle name fields
+		if( $field->type == 'name' ) {
+			// TODO: Use field options to remove some fields from export
+			// Adds values for name extended 
+			array_push($field_ids, $field['id'] . '.2');
+			array_push($field_ids, $field['id'] . '.3');
+			array_push($field_ids, $field['id'] . '.4');
+			array_push($field_ids, $field['id'] . '.6');
+			array_push($field_ids, $field['id'] . '.8');
+
+			foreach($field->inputs as $input) {
+				$noStrip = array();
+				$str = $field->label . " " . $input['label'];
+				$str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
+				$str = trim($str);
+				$str = ucwords($str);
+				$str = str_replace(" ", "", $str);
+				$str = lcfirst($str);
+				$str =  substr( $str, 0, 28 );
+			
+				$output .= preg_replace('/[,]/', '', $str) . ','; 
+			}
+			continue;
+		}
 
             $output .= preg_replace('/[,]/', '', $field->label) . ','; 
         }
