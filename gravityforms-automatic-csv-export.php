@@ -178,8 +178,9 @@ class GravityFormsAutomaticCSVExport {
 
 		foreach( $form['fields'] as $field ) {
 
-            if($field->type == 'section') 
-                continue;
+		// Documentation is missing 'page' as a field type, not sure if there are any others that aren't in the documentation.  https://www.gravityhelp.com/documentation/article/field-object/
+		if(in_array($field->type, array('section','html','page'))
+			continue;
 
             //don't include hidden name fields
             if( $field->type == 'name' ) {
