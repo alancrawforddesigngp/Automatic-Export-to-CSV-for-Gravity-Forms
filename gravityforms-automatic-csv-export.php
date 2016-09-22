@@ -197,13 +197,6 @@ class GravityFormsAutomaticCSVExport {
 			foreach($field->inputs as $input) {
 				$noStrip = array();
 				$str = $field->label . " " . $input['label'];
-				$str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
-				$str = trim($str);
-				$str = ucwords($str);
-				$str = str_replace(" ", "", $str);
-				$str = lcfirst($str);
-				$str =  substr( $str, 0, 28 );
-			
 				$output .= preg_replace('/[,]/', '', $str) . ','; 
 			}
 			continue;
@@ -222,13 +215,6 @@ class GravityFormsAutomaticCSVExport {
 			foreach($field->inputs as $input) {
 				$noStrip = array();
 				$str = $field->label . " " . $input['label'];
-				$str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
-				$str = trim($str);
-				$str = ucwords($str);
-				$str = str_replace(" ", "", $str);
-				$str = lcfirst($str);
-				$str =  substr( $str, 0, 28 );
-				
 				$output .= preg_replace('/[,]/', '', $str) . ','; 
 			}
 			continue;
