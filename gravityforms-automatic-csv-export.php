@@ -175,6 +175,8 @@ class GravityFormsAutomaticCSVExport {
 
 		$all_form_entries = GFAPI::get_entries( $form_id , $search_criteria, null, $paging, $total_count);
 		
+		 // Create an array of field ids
+		$field_ids = array();
 
 		foreach( $form['fields'] as $field ) {
 
@@ -231,6 +233,9 @@ class GravityFormsAutomaticCSVExport {
 			}
 			continue;
 		}
+		
+		// Add field ids to array
+		array_push($field_ids, $field->id);
 
             $output .= preg_replace('/[,]/', '', $field->label) . ','; 
         }
@@ -242,25 +247,12 @@ class GravityFormsAutomaticCSVExport {
 	        foreach ( $all_form_entries as $entry ) {
 
 	            foreach($entry as $key => $val) {
-	                //skip blank values
-	                if(strlen($val) > 0) {
-
-	                    //if next value is not a decimal key but previous one was, stop appending for that field
-	                    if(strpos( $key, '.' ) === false && substr($output, strlen($output)-1, 1) == ' ') {
-	                        $output .= ',';
-	                    }
-
-	                    //decimal keys (EX: for a Name field which has several inputs)
-	                    if (is_numeric( $key ) && strpos( $key, '.' )) {
-	                        $output .= preg_replace('/[,]/', '', sanitize_text_field($val));
-	                        $output .= ' ';
-	                    }
-	                    else if (is_int($key)) { //regular integer key for standard fields
-	                        $output .= preg_replace('/[,]/', '', sanitize_text_field($val));
-	                        $output .= ',';
-	                    }
-	                }
-	            }
+			foreach($field_ids as $field_id) {
+				$val = rgar($entry, $field_id);
+				$output .= preg_replace('/[,]/', '', sanitize_text_field($val));
+				$output .= ',';
+			}
+		   }
 
 	            $output .= ',';
 	            $output .= "\r\n";
